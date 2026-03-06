@@ -10,6 +10,7 @@ const MEDIA_PROFILE = "curated-stock";
 const THEME_MODE = "batman-explicit";
 const CTA_MOTION_PROFILE = "touch-cinematic";
 const MOBILE_COMPAT_PROFILE = "redmi-chrome";
+const FORCE_CINEMATIC_MOTION = true;
 const REDMI_VIEWPORTS = [
   { name: "redmi-note-12", width: 393, height: 873, deviceScaleFactor: 2.75 },
   { name: "redmi-note-11", width: 393, height: 851, deviceScaleFactor: 2.75 },
@@ -31,6 +32,11 @@ const MEDIA_MANIFEST = {
   noir01: { src: "assets/media/noir_city_01.webp", intent: "city-still-primary", kind: "image" },
   noir02: { src: "assets/media/noir_city_02.webp", intent: "city-still-secondary", kind: "image" },
   noir03: { src: "assets/media/noir_city_03.webp", intent: "city-still-tertiary", kind: "image" },
+  note01: { src: "assets/media/ananda-note-01.jpg", intent: "personal-note-evidence", kind: "image" },
+  note02: { src: "assets/media/ananda-note-02.jpg", intent: "personal-note-evidence", kind: "image" },
+  note03: { src: "assets/media/ananda-note-03.jpg", intent: "personal-note-evidence", kind: "image" },
+  note04: { src: "assets/media/ananda-note-04.jpg", intent: "personal-note-evidence", kind: "image" },
+  note05: { src: "assets/media/ananda-note-05.jpg", intent: "personal-note-signature", kind: "image" },
 };
 
 const PERF_TUNINGS = {
@@ -45,6 +51,7 @@ const PERF_TUNINGS = {
 };
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const motionReductionActive = prefersReducedMotion && !FORCE_CINEMATIC_MOTION;
 const mobileQuery = window.matchMedia("(max-width: 760px)");
 
 document.querySelectorAll("[data-friend-name]").forEach((node) => {
@@ -56,6 +63,11 @@ document.body.dataset.mediaProfile = MEDIA_PROFILE;
 document.body.dataset.themeMode = THEME_MODE;
 document.body.dataset.ctaMotionProfile = CTA_MOTION_PROFILE;
 document.body.dataset.mobileCompatProfile = MOBILE_COMPAT_PROFILE;
+document.body.dataset.motionProfile = motionReductionActive ? "reduced" : "cinematic";
+if (FORCE_CINEMATIC_MOTION) {
+  document.documentElement.classList.add("force-motion");
+  document.body.classList.add("force-motion");
+}
 
 const activePerfTuning = PERF_TUNINGS[PERF_PROFILE] || PERF_TUNINGS["balanced-premium"];
 
@@ -69,6 +81,7 @@ window.__BIRTHDAY_SITE_CONFIG = {
   THEME_MODE,
   CTA_MOTION_PROFILE,
   MOBILE_COMPAT_PROFILE,
+  FORCE_CINEMATIC_MOTION,
   REDMI_VIEWPORTS,
   INSPIRATION_SOURCES,
 };
@@ -103,7 +116,7 @@ function hydrateMediaNode(node) {
         node.setAttribute("poster", posterSrc);
       }
     }
-    if (prefersReducedMotion) {
+    if (motionReductionActive) {
       return;
     }
     if (!node.getAttribute("src")) {
@@ -172,7 +185,7 @@ function syncHeroLoopState() {
   if (!heroLoopVideo) {
     return;
   }
-  if (prefersReducedMotion) {
+  if (motionReductionActive) {
     heroLoopVideo.pause();
     return;
   }
@@ -214,7 +227,7 @@ function hideLoader() {
   openingSequence.classList.add("launching");
   window.setTimeout(() => {
     openingSequence.classList.add("hidden");
-  }, 640);
+  }, 620);
 }
 
 function runOpeningSequence() {
@@ -228,7 +241,7 @@ function runOpeningSequence() {
     "CITY LAUNCH // final lock",
   ];
 
-  const duration = prefersReducedMotion ? 1600 : LOADER_DURATION_MS;
+  const duration = motionReductionActive ? 1600 : LOADER_DURATION_MS;
   const start = performance.now();
   let stageIndex = 0;
   let lastRounded = -1;
@@ -378,9 +391,9 @@ function scrollToAnchorTarget(anchor) {
   if (!target) {
     return;
   }
-  const offset = prefersReducedMotion ? 0 : 150;
+  const offset = motionReductionActive ? 0 : 150;
   window.setTimeout(() => {
-    target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
+    target.scrollIntoView({ behavior: motionReductionActive ? "auto" : "smooth", block: "start" });
     if (history.replaceState) {
       history.replaceState(null, "", href);
     }
@@ -470,11 +483,23 @@ function updateTimecode() {
 
 const countdownTarget = document.getElementById("countdownTarget");
 const countdownStatus = document.getElementById("countdownStatus");
-const cdDays = document.getElementById("cdDays");
-const cdHours = document.getElementById("cdHours");
-const cdMinutes = document.getElementById("cdMinutes");
-const cdSeconds = document.getElementById("cdSeconds");
+const countdownFlipNodes = {
+  days: document.querySelector('[data-flip="days"]'),
+  hours: document.querySelector('[data-flip="hours"]'),
+  minutes: document.querySelector('[data-flip="minutes"]'),
+  seconds: document.querySelector('[data-flip="seconds"]'),
+};
+const countdownFlipState = {
+  days: "00",
+  hours: "00",
+  minutes: "00",
+  seconds: "00",
+};
+const countdownFlipTimers = {};
+const countdownFlipListeners = {};
+let countdownLoopTimer = 0;
 let zeroTriggered = false;
+const FLIP_ANIMATION_TIMEOUT_MS = 760;
 
 function parseMonthDay(monthDay) {
   const [month, day] = monthDay.split("-").map((value) => Number(value));
@@ -497,8 +522,131 @@ function pad(value) {
   return String(value).padStart(2, "0");
 }
 
+function setFlipStackValue(unit, nextValue, animate = true) {
+  const stack = countdownFlipNodes[unit];
+  if (!stack) {
+    return;
+  }
+
+  const topStatic = stack.querySelector(".flip-static-top span");
+  const bottomStatic = stack.querySelector(".flip-static-bottom span");
+  const topFlapPanel = stack.querySelector(".flip-flap-top");
+  const bottomFlapPanel = stack.querySelector(".flip-flap-bottom");
+  const topFlapText = topFlapPanel ? topFlapPanel.querySelector("span") : null;
+  const bottomFlapText = bottomFlapPanel ? bottomFlapPanel.querySelector("span") : null;
+  if (!topStatic || !bottomStatic || !topFlapPanel || !bottomFlapPanel || !topFlapText || !bottomFlapText) {
+    return;
+  }
+
+  const priorListeners = countdownFlipListeners[unit];
+  if (priorListeners) {
+    priorListeners.topFlapPanel.removeEventListener("animationend", priorListeners.onTopAnimationEnd);
+    priorListeners.bottomFlapPanel.removeEventListener("animationend", priorListeners.onBottomAnimationEnd);
+    countdownFlipListeners[unit] = null;
+  }
+
+  const previous = countdownFlipState[unit] || topStatic.textContent || "00";
+  if (previous === nextValue) {
+    topStatic.textContent = nextValue;
+    bottomStatic.textContent = nextValue;
+    return;
+  }
+
+  if (countdownFlipTimers[unit]) {
+    window.clearTimeout(countdownFlipTimers[unit]);
+    countdownFlipTimers[unit] = 0;
+  }
+
+  if (motionReductionActive || !animate) {
+    topStatic.textContent = nextValue;
+    bottomStatic.textContent = nextValue;
+    topFlapText.textContent = nextValue;
+    bottomFlapText.textContent = nextValue;
+    countdownFlipState[unit] = nextValue;
+    return;
+  }
+
+  topStatic.textContent = previous;
+  bottomStatic.textContent = nextValue;
+  topFlapText.textContent = previous;
+  bottomFlapText.textContent = nextValue;
+
+  let topCommitted = false;
+  let finalized = false;
+  const commitTopHalf = () => {
+    if (topCommitted) {
+      return;
+    }
+    topCommitted = true;
+    topStatic.textContent = nextValue;
+  };
+
+  const finalizeFlip = () => {
+    if (finalized) {
+      return;
+    }
+    finalized = true;
+    commitTopHalf();
+    bottomStatic.textContent = nextValue;
+    topFlapText.textContent = nextValue;
+    bottomFlapText.textContent = nextValue;
+    stack.classList.remove("flipping");
+    stack.classList.remove("flash");
+    topFlapPanel.removeEventListener("animationend", onTopAnimationEnd);
+    bottomFlapPanel.removeEventListener("animationend", onBottomAnimationEnd);
+    countdownFlipListeners[unit] = null;
+    countdownFlipTimers[unit] = 0;
+  };
+
+  const onTopAnimationEnd = (event) => {
+    if (event.target !== topFlapPanel) {
+      return;
+    }
+    commitTopHalf();
+  };
+
+  const onBottomAnimationEnd = (event) => {
+    if (event.target !== bottomFlapPanel) {
+      return;
+    }
+    finalizeFlip();
+  };
+
+  countdownFlipListeners[unit] = {
+    topFlapPanel,
+    bottomFlapPanel,
+    onTopAnimationEnd,
+    onBottomAnimationEnd,
+  };
+  topFlapPanel.addEventListener("animationend", onTopAnimationEnd);
+  bottomFlapPanel.addEventListener("animationend", onBottomAnimationEnd);
+
+  stack.classList.remove("flipping");
+  stack.classList.remove("flash");
+  void stack.offsetWidth;
+  stack.classList.add("flipping");
+  stack.classList.add("flash");
+
+  countdownFlipTimers[unit] = window.setTimeout(() => {
+    finalizeFlip();
+  }, FLIP_ANIMATION_TIMEOUT_MS);
+
+  countdownFlipState[unit] = nextValue;
+}
+
+function setCountdownValues(days, hours, minutes, seconds, animate = true) {
+  setFlipStackValue("days", days, animate);
+  setFlipStackValue("hours", hours, animate);
+  setFlipStackValue("minutes", minutes, animate);
+  setFlipStackValue("seconds", seconds, animate);
+}
+
 function runCountdown() {
-  if (!countdownTarget || !countdownStatus || !cdDays || !cdHours || !cdMinutes || !cdSeconds) {
+  if (!countdownTarget || !countdownStatus) {
+    return;
+  }
+
+  if (!countdownFlipNodes.days || !countdownFlipNodes.hours || !countdownFlipNodes.minutes || !countdownFlipNodes.seconds) {
     return;
   }
 
@@ -527,10 +675,7 @@ function runCountdown() {
 
   const tick = () => {
     if (isBirthdayToday) {
-      cdDays.textContent = "00";
-      cdHours.textContent = "00";
-      cdMinutes.textContent = "00";
-      cdSeconds.textContent = "00";
+      setCountdownValues("00", "00", "00", "00", false);
       countdownStatus.textContent = `LEVEL ${turningAge} UNLOCKED.`;
       triggerZeroCinematic();
       return false;
@@ -539,10 +684,7 @@ function runCountdown() {
     const current = new Date();
     const diff = targetDate.getTime() - current.getTime();
     if (diff <= 0) {
-      cdDays.textContent = "00";
-      cdHours.textContent = "00";
-      cdMinutes.textContent = "00";
-      cdSeconds.textContent = "00";
+      setCountdownValues("00", "00", "00", "00");
       countdownStatus.textContent = `LEVEL ${turningAge} UNLOCKED.`;
       triggerZeroCinematic();
       return false;
@@ -554,25 +696,34 @@ function runCountdown() {
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
 
-    cdDays.textContent = pad(days);
-    cdHours.textContent = pad(hours);
-    cdMinutes.textContent = pad(minutes);
-    cdSeconds.textContent = pad(seconds);
+    setCountdownValues(pad(days), pad(hours), pad(minutes), pad(seconds));
     countdownStatus.textContent = `COUNTDOWN TO LEVEL ${turningAge}.`;
     return true;
   };
+
+  if (countdownLoopTimer) {
+    window.clearTimeout(countdownLoopTimer);
+    countdownLoopTimer = 0;
+  }
 
   const active = tick();
   if (!active) {
     return;
   }
 
-  const timer = window.setInterval(() => {
-    const keepGoing = tick();
-    if (!keepGoing) {
-      window.clearInterval(timer);
-    }
-  }, 1000);
+  const scheduleNextTick = () => {
+    const delay = Math.max(16, 1000 - (Date.now() % 1000) + 8);
+    countdownLoopTimer = window.setTimeout(() => {
+      const keepGoing = tick();
+      if (!keepGoing) {
+        countdownLoopTimer = 0;
+        return;
+      }
+      scheduleNextTick();
+    }, delay);
+  };
+
+  scheduleNextTick();
 }
 
 const scrollProgressBar = document.getElementById("scrollProgressBar");
@@ -587,7 +738,7 @@ function updateScrollProgress() {
 }
 
 const spotlightLayer = document.querySelector(".spotlight-layer");
-if (spotlightLayer && !prefersReducedMotion) {
+if (spotlightLayer && !motionReductionActive) {
   let spotlightRaf = 0;
   let nextMx = 0;
   let nextMy = 0;
@@ -682,7 +833,7 @@ filmCards.forEach((card, index) => {
     }
   });
 
-  if (!prefersReducedMotion) {
+  if (!motionReductionActive) {
     card.addEventListener("pointermove", (event) => {
       if (!filmBoard || filmBoard.classList.contains("list-view") || mobileQuery.matches) {
         return;
@@ -860,9 +1011,14 @@ let embers = [];
 let lightning = 0;
 let confettiPieces = [];
 let confettiFrame = null;
+let lastFxFrameTs = performance.now();
 
 function randomBetween(min, max) {
   return Math.random() * (max - min) + min;
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
 }
 
 function getPerformanceCount(baseCount) {
@@ -908,6 +1064,10 @@ function renderFx() {
   if (!fxCtx || !fxCanvas) {
     return;
   }
+
+  const now = performance.now();
+  const deltaMs = Math.min(34, Math.max(8, now - lastFxFrameTs));
+  lastFxFrameTs = now;
 
   const width = fxCanvas.width;
   const height = fxCanvas.height;
