@@ -1,0 +1,21 @@
+Audio Sources (CC0 / Public Domain)
+
+1) cinematic_hit_horns.mp3
+   Source: https://freesound.org/s/427803/
+   Direct file: https://cdn.freesound.org/previews/427/427803_2866779-hq.mp3
+   License: Creative Commons 0 (Public Domain)
+
+2) ambience_black.mp3
+   Source: https://freesound.org/s/256444/
+   Direct file: https://cdn.freesound.org/previews/256/256444_227630-hq.mp3
+   License: CC0 / Public Domain
+
+3) ambience_darkgrey.mp3
+   Source: https://freesound.org/s/256445/
+   Direct file: https://cdn.freesound.org/previews/256/256445_227630-hq.mp3
+   License: CC0 / Public Domain
+
+4) scifi_riser_whoosh.mp3
+   Source: https://freesound.org/s/760190/
+   Direct file: https://cdn.freesound.org/previews/760/760190_16330994-hq.mp3
+   License: CC0

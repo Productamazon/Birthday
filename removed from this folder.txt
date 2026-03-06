@@ -1,0 +1,3 @@
+removed from this folder 
+go to run and search for shell:startup
+then paste the file their ,if you want to restart the automation

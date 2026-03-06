@@ -1,0 +1,14 @@
+Curated Stock Media Sources (royalty-free / open-licensed)
+
+1) noir_loop_city.webm
+   Source page: https://commons.wikimedia.org/wiki/File:City_timelapse_video.webm
+   File path endpoint: https://commons.wikimedia.org/wiki/Special:FilePath/City_timelapse_video.webm
+   License: Wikimedia Commons file license on source page (verify before redistribution bundle changes).
+
+2) noir_city_01.webp
+3) noir_city_02.webp
+4) noir_city_03.webp
+   Source family: Unsplash (royalty-free stock photography)
+   License page: https://unsplash.com/license
+   Note: Exact original photo URLs are not embedded in local file metadata. If recurating these files,
+   store the exact source links here for long-term attribution traceability.

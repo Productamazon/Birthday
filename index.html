@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ananda Krishna Siva | Director Protocol</title>
+  <meta name="description" content="A Batman-style cinematic birthday experience with hidden-in-chaos noir energy.">
+  <link rel="icon" type="image/svg+xml" href="assets/media/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Teko:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="openingSequence" class="opening-sequence" aria-live="polite">
+    <div class="opening-shutter opening-shutter-top" aria-hidden="true"></div>
+    <div class="opening-shutter opening-shutter-bottom" aria-hidden="true"></div>
+    <div class="opening-grid" aria-hidden="true"></div>
+    <div class="opening-content">
+      <p class="opening-label">Batman Director Protocol</p>
+      <h1 class="opening-title">PROJECT <span data-friend-name>FRIEND</span></h1>
+      <div class="opening-rings" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="loading-track" aria-hidden="true">
+        <div id="loadingBar" class="loading-bar"></div>
+      </div>
+      <div class="loading-meta">
+        <p id="openingCount" class="opening-count">0%</p>
+        <p id="loadingStage" class="loading-stage">Booting visual core...</p>
+      </div>
+      <div id="loadingPhases" class="loading-phases" aria-hidden="true">
+        <span class="active"></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-progress" aria-hidden="true">
+    <span id="scrollProgressBar"></span>
+  </div>
+
+  <canvas id="fxCanvas" aria-hidden="true"></canvas>
+  <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+  <div class="noise-layer" aria-hidden="true"></div>
+  <div class="spotlight-layer" aria-hidden="true"></div>
+  <div class="chaos-skyline" aria-hidden="true"></div>
+  <div class="chaos-veil" aria-hidden="true"></div>
+
+  <header class="top-rail">
+    <div class="container rail-inner">
+      <p>BIRTHDAY PREMIERE // BATMAN CUT // 2026</p>
+      <nav class="main-nav" aria-label="Page sections">
+        <a href="#showreel">Showreel</a>
+        <a href="#controlRoom">Control</a>
+        <a href="#journey">Journey</a>
+        <a href="#wishes">Manifesto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="hero" class="hero section">
+      <div class="hero-video-layer" aria-hidden="true">
+        <video id="heroLoopVideo" class="hero-loop-video deferred-media" muted loop playsinline preload="none" data-media-key="loopCity" data-poster-key="noir01"></video>
+      </div>
+      <div class="container hero-grid">
+        <div>
+          <p class="kicker reveal">THE BATMAN // HIDDEN IN CHAOS</p>
+          <h1 class="title reveal">
+            <span data-friend-name>ANANDA KRISHNA SIVA</span>
+          </h1>
+          <p class="subtitle reveal">
+            Gotham-grade darkness. Relentless discipline. Director instinct.
+            This is a bat-signal style identity build, engineered to feel like a cinematic operation.
+          </p>
+
+          <article class="countdown-card reveal" aria-live="polite">
+            <p class="card-kicker">Countdown To March 07</p>
+            <p id="countdownTarget" class="countdown-target">Target date</p>
+            <div class="countdown-grid">
+              <div class="countdown-unit">
+                <span id="cdDays">00</span>
+                <small>Days</small>
+              </div>
+              <div class="countdown-unit">
+                <span id="cdHours">00</span>
+                <small>Hours</small>
+              </div>
+              <div class="countdown-unit">
+                <span id="cdMinutes">00</span>
+                <small>Minutes</small>
+              </div>
+              <div class="countdown-unit">
+                <span id="cdSeconds">00</span>
+                <small>Seconds</small>
+              </div>
+            </div>
+            <p id="countdownStatus" class="countdown-status">Timecode running.</p>
+          </article>
+
+          <div class="hero-actions reveal">
+            <button id="surpriseBtn" data-cta="ignite" class="btn btn-primary" type="button">Ignite Sequence</button>
+            <a data-cta="showreel" class="btn btn-ghost" href="#showreel">Enter Showreel</a>
+            <a data-cta="manifesto" class="btn btn-ghost" href="#wishes">Read Manifesto</a>
+          </div>
+        </div>
+
+        <aside class="director-card reveal" aria-label="Director profile">
+          <p class="card-kicker">Director Profile</p>
+          <h2><span data-friend-name>ANANDA KRISHNA SIVA</span></h2>
+          <ul>
+            <li><span>Date of Birth</span><strong>March 07, 2000</strong></li>
+            <li><span>Primary Tone</span><strong>Batman noir pressure</strong></li>
+            <li><span>Style System</span><strong>Hidden chaos contrast</strong></li>
+            <li><span>Mission</span><strong>Direct unforgettable films</strong></li>
+          </ul>
+          <div class="timecode-widget">
+            <p class="timecode-label">Live Timecode</p>
+            <p id="liveTimecode" class="timecode-value">00:00:00</p>
+          </div>
+        </aside>
+      </div>
+
+      <div class="ticker-wrap reveal" aria-hidden="true">
+        <div class="ticker-track">
+          <span>DIRECTOR MODE: ACTIVE</span>
+          <span>SCENE: ASCENT</span>
+          <span>STYLE: BRUTAL ELEGANCE</span>
+          <span>CAMERA: ROLLING</span>
+          <span>FRAME: LEGENDARY</span>
+          <span>DIRECTOR MODE: ACTIVE</span>
+          <span>SCENE: ASCENT</span>
+          <span>STYLE: BRUTAL ELEGANCE</span>
+          <span>CAMERA: ROLLING</span>
+          <span>FRAME: LEGENDARY</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="showreel" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Showreel Archive</p>
+          <h2>Batman-Grade Moments Rendered As Cinema</h2>
+        </div>
+
+        <div class="board-toolbar reveal">
+          <p class="toolbar-note">Layout</p>
+          <div class="view-toggle" role="group" aria-label="Showreel layout">
+            <button class="toggle-btn active" data-view="grid" aria-pressed="true" type="button">Grid</button>
+            <button class="toggle-btn" data-view="list" aria-pressed="false" type="button">List</button>
+          </div>
+        </div>
+
+        <div class="film-board-shell">
+          <button id="showreelPrev" class="board-nav board-nav-left" type="button" aria-label="Previous scene">&#8249;</button>
+          <div id="filmBoard" class="film-board grid-view">
+            <article class="film-card reveal" tabindex="0">
+              <div class="poster poster-a">
+                <img class="poster-media deferred-media" data-media-key="noir01" alt="Night skyline with cinematic lighting" loading="lazy" decoding="async">
+                <span class="badge">Scene 01</span>
+              </div>
+              <div class="film-copy">
+                <h3>Origin Spark</h3>
+                <p>The instant ambition became non-negotiable.</p>
+              </div>
+            </article>
+            <article class="film-card reveal" tabindex="0">
+              <div class="poster poster-b">
+                <img class="poster-media deferred-media" data-media-key="noir02" alt="Downtown architecture at night" loading="lazy" decoding="async">
+                <span class="badge">Scene 02</span>
+              </div>
+              <div class="film-copy">
+                <h3>Controlled Chaos</h3>
+                <p>Ideas collide, then reorganize into vision.</p>
+              </div>
+            </article>
+            <article class="film-card reveal" tabindex="0">
+              <div class="poster poster-c">
+                <img class="poster-media deferred-media" data-media-key="noir03" alt="Urban streets with dramatic contrast" loading="lazy" decoding="async">
+                <span class="badge">Scene 03</span>
+              </div>
+              <div class="film-copy">
+                <h3>Lead Presence</h3>
+                <p>Calm, focused, and impossible to ignore.</p>
+              </div>
+            </article>
+            <article class="film-card reveal" tabindex="0">
+              <div class="poster poster-d">
+                <img class="poster-media deferred-media" data-media-key="noir01" alt="Cinematic skyline close-up" loading="lazy" decoding="async">
+                <span class="badge">Scene 04</span>
+              </div>
+              <div class="film-copy">
+                <h3>Director Instinct</h3>
+                <p>Decisions made with precision under pressure.</p>
+              </div>
+            </article>
+            <article class="film-card reveal" tabindex="0">
+              <div class="poster poster-e">
+                <img class="poster-media deferred-media" data-media-key="noir02" alt="City lights reflecting on glass" loading="lazy" decoding="async">
+                <span class="badge">Scene 05</span>
+              </div>
+              <div class="film-copy">
+                <h3>Audience Impact</h3>
+                <p>Emotional force, frame after frame.</p>
+              </div>
+            </article>
+            <article class="film-card reveal" tabindex="0">
+              <div class="poster poster-f">
+                <img class="poster-media deferred-media" data-media-key="noir03" alt="Dense urban night scene with depth" loading="lazy" decoding="async">
+                <span class="badge">Scene 06</span>
+              </div>
+              <div class="film-copy">
+                <h3>Final Cut</h3>
+                <p>This chapter closes. The legend opens.</p>
+              </div>
+            </article>
+          </div>
+          <button id="showreelNext" class="board-nav board-nav-right" type="button" aria-label="Next scene">&#8250;</button>
+        </div>
+        <p class="swipe-note reveal">Mobile: swipe laterally to scrub scenes.</p>
+      </div>
+    </section>
+
+    <section id="controlRoom" class="section section-panel">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Control Room</p>
+          <h2>Real-Time Gotham Visual Systems</h2>
+        </div>
+        <div class="control-grid">
+          <article class="widget reveal">
+            <p class="card-kicker">Intensity Calibration</p>
+            <h3>Visual Pressure</h3>
+            <input id="intensityRange" class="intensity-range" type="range" min="60" max="190" value="110" step="1" aria-label="Visual intensity">
+            <p id="intensityValue" class="widget-note">110%</p>
+          </article>
+          <article class="widget reveal">
+            <p class="card-kicker">Signal Trigger</p>
+            <h3>Skyline Pulse</h3>
+            <button id="batSignalBtn" class="btn btn-primary" type="button">Trigger Pulse</button>
+            <p class="widget-note">Injects a high-energy environmental burst.</p>
+          </article>
+          <article class="widget reveal">
+            <p class="card-kicker">System Feed</p>
+            <h3>Status</h3>
+            <ul class="status-list">
+              <li><span></span>Frame Engine: Stable</li>
+              <li><span></span>Narrative Core: Online</li>
+              <li><span></span>Mood Layer: Aggressive</li>
+              <li><span></span>Director Mode: Locked</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="journey" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Story Pipeline</p>
+          <h2>Dark Knight Director Ascent Timeline</h2>
+        </div>
+
+        <div class="process-grid">
+          <article class="process-step reveal">
+            <p class="step-no">01</p>
+            <h3>Observe</h3>
+            <p>Collect emotional truth from real life.</p>
+          </article>
+          <article class="process-step reveal">
+            <p class="step-no">02</p>
+            <h3>Write</h3>
+            <p>Convert ideas into structured impact.</p>
+          </article>
+          <article class="process-step reveal">
+            <p class="step-no">03</p>
+            <h3>Direct</h3>
+            <p>Command frame, rhythm, and performance.</p>
+          </article>
+          <article class="process-step reveal">
+            <p class="step-no">04</p>
+            <h3>Own</h3>
+            <p>Release work that leaves permanent marks.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="wishes" class="section">
+      <div class="container wish-layout">
+        <article class="letter reveal">
+          <p class="kicker">Manifesto</p>
+          <h2><span data-friend-name>ANANDA KRISHNA SIVA</span></h2>
+          <p>
+            No soft focus. No safe frames.
+            This era is built on discipline, hidden-chaos style, and execution.
+          </p>
+          <p>
+            You are not waiting for permission.
+            You are building a film language that cannot be copied.
+          </p>
+          <p class="signature">Direct hard. Cut clean. Leave impact.</p>
+        </article>
+
+        <aside class="call-sheet reveal">
+          <p class="card-kicker">Next Moves</p>
+          <h3>Action Queue</h3>
+          <ul>
+            <li>Build one short script every month.</li>
+            <li>Practice shot composition every week.</li>
+            <li>Create a noir-style visual sample reel.</li>
+            <li>Submit work to public critique loops.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <aside id="surprisePanel" class="surprise-panel" aria-live="polite">
+    <div class="surprise-content">
+      <p class="kicker">System Alert</p>
+      <h2>Director Potential: Extreme</h2>
+      <p>This profile is not built for average outcomes.</p>
+      <button id="closeSurpriseBtn" class="btn btn-primary" type="button">Return</button>
+    </div>
+  </aside>
+
+  <aside id="zeroCinematic" class="zero-cinematic" aria-live="assertive">
+    <div class="zero-beam zero-beam-a" aria-hidden="true"></div>
+    <div class="zero-beam zero-beam-b" aria-hidden="true"></div>
+    <div class="zero-beam zero-beam-c" aria-hidden="true"></div>
+    <div class="zero-content">
+      <p class="zero-kicker">Countdown Reached Zero</p>
+      <h2>HAPPY BIRTHDAY</h2>
+      <p><span data-friend-name>ANANDA KRISHNA SIVA</span> // Director Protocol Elevated.</p>
+      <button id="zeroCloseBtn" class="btn btn-primary" type="button">Continue</button>
+    </div>
+  </aside>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>DIRECTOR FILE // <span data-friend-name>ANANDA KRISHNA SIVA</span></p>
+      <p class="credit-line">CUT_07</p>
+    </div>
+  </footer>
+
+  <nav class="mobile-dock" aria-label="Mobile quick actions">
+    <button class="dock-btn" data-jump="#showreel" type="button">Showreel</button>
+    <button id="mobileCelebrateBtn" class="dock-btn dock-primary" type="button">Trigger</button>
+    <button class="dock-btn" data-jump="#wishes" type="button">Manifesto</button>
+  </nav>
+
+  <script src="script.js"></script>
+</body>
+</html>
