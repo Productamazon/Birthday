@@ -1,5 +1,4 @@
-node_modules/
+ref/
 test-results/
 playwright-report/
-.DS_Store
-ref/
+node_modules/

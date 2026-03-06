@@ -12,3 +12,11 @@ Curated Stock Media Sources (royalty-free / open-licensed)
    License page: https://unsplash.com/license
    Note: Exact original photo URLs are not embedded in local file metadata. If recurating these files,
    store the exact source links here for long-term attribution traceability.
+
+5) ananda-note-01.jpg
+6) ananda-note-02.jpg
+7) ananda-note-03.jpg
+8) ananda-note-04.jpg
+9) ananda-note-05.jpg
+   Source: User-provided uploads from local `ref` folder.
+   Usage: Personal signature/evidence visuals integrated into the birthday site.

@@ -51,6 +51,7 @@
       <p>BIRTHDAY PREMIERE // BATMAN CUT // 2026</p>
       <nav class="main-nav" aria-label="Page sections">
         <a href="#showreel">Showreel</a>
+        <a href="#evidence">Evidence</a>
         <a href="#controlRoom">Control</a>
         <a href="#journey">Journey</a>
         <a href="#wishes">Manifesto</a>
@@ -79,19 +80,39 @@
             <p id="countdownTarget" class="countdown-target">Target date</p>
             <div class="countdown-grid">
               <div class="countdown-unit">
-                <span id="cdDays">00</span>
+                <div class="flip-stack" data-flip="days">
+                  <div class="flip-static flip-static-top"><span>00</span></div>
+                  <div class="flip-static flip-static-bottom"><span>00</span></div>
+                  <div class="flip-flap flip-flap-top"><span>00</span></div>
+                  <div class="flip-flap flip-flap-bottom"><span>00</span></div>
+                </div>
                 <small>Days</small>
               </div>
               <div class="countdown-unit">
-                <span id="cdHours">00</span>
+                <div class="flip-stack" data-flip="hours">
+                  <div class="flip-static flip-static-top"><span>00</span></div>
+                  <div class="flip-static flip-static-bottom"><span>00</span></div>
+                  <div class="flip-flap flip-flap-top"><span>00</span></div>
+                  <div class="flip-flap flip-flap-bottom"><span>00</span></div>
+                </div>
                 <small>Hours</small>
               </div>
               <div class="countdown-unit">
-                <span id="cdMinutes">00</span>
+                <div class="flip-stack" data-flip="minutes">
+                  <div class="flip-static flip-static-top"><span>00</span></div>
+                  <div class="flip-static flip-static-bottom"><span>00</span></div>
+                  <div class="flip-flap flip-flap-top"><span>00</span></div>
+                  <div class="flip-flap flip-flap-bottom"><span>00</span></div>
+                </div>
                 <small>Minutes</small>
               </div>
               <div class="countdown-unit">
-                <span id="cdSeconds">00</span>
+                <div class="flip-stack" data-flip="seconds">
+                  <div class="flip-static flip-static-top"><span>00</span></div>
+                  <div class="flip-static flip-static-bottom"><span>00</span></div>
+                  <div class="flip-flap flip-flap-top"><span>00</span></div>
+                  <div class="flip-flap flip-flap-bottom"><span>00</span></div>
+                </div>
                 <small>Seconds</small>
               </div>
             </div>
@@ -133,6 +154,43 @@
           <span>STYLE: BRUTAL ELEGANCE</span>
           <span>CAMERA: ROLLING</span>
           <span>FRAME: LEGENDARY</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="evidence" class="section evidence-section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Evidence Vault</p>
+          <h2>Personal Cinematic Frames</h2>
+        </div>
+        <p class="toolbar-note reveal">Imported from your uploaded `ref` folder and graded into the noir system.</p>
+        <div class="evidence-grid">
+          <article class="evidence-card reveal">
+            <div class="evidence-paper">
+              <img class="evidence-media deferred-media" data-media-key="note05" alt="Portrait capture in temple grounds frame 1" loading="lazy" decoding="async">
+            </div>
+          </article>
+          <article class="evidence-card reveal">
+            <div class="evidence-paper">
+              <img class="evidence-media deferred-media" data-media-key="note02" alt="Portrait capture in temple grounds frame 2" loading="lazy" decoding="async">
+            </div>
+          </article>
+          <article class="evidence-card reveal">
+            <div class="evidence-paper">
+              <img class="evidence-media deferred-media" data-media-key="note03" alt="Portrait capture with large statue frame 3" loading="lazy" decoding="async">
+            </div>
+          </article>
+          <article class="evidence-card reveal">
+            <div class="evidence-paper portrait">
+              <img class="evidence-media deferred-media" data-media-key="note04" alt="Portrait capture with Shiva idol frame 4" loading="lazy" decoding="async">
+            </div>
+          </article>
+          <article class="evidence-card reveal">
+            <div class="evidence-paper">
+              <img class="evidence-media deferred-media" data-media-key="note01" alt="Portrait capture in temple grounds frame 5" loading="lazy" decoding="async">
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -301,6 +359,9 @@
             You are building a film language that cannot be copied.
           </p>
           <p class="signature">Direct hard. Cut clean. Leave impact.</p>
+          <div class="signature-stamp" aria-hidden="true">
+            <img class="signature-media deferred-media" data-media-key="note05" alt="Portrait highlight frame" loading="lazy" decoding="async">
+          </div>
         </article>
 
         <aside class="call-sheet reveal">
